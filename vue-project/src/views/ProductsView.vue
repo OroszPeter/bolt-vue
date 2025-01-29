@@ -9,13 +9,20 @@
             
             <p>Készlet: {{ product.stock }}</p>
             
-            <button :disabled="product.stock === 0">{{ product.stock > 0 ? "Kosárba" : "Nincs készlet"}}</button>
+            <button @click="addToCart(product)" :disabled="product.stock === 0">{{ product.stock > 0 ? "Kosárba" : "Nincs készlet"}}</button>
         </div>
     </div>
 </template>
 
 <script setup>
 import { useProductsStore } from '@/stores/products';
+import { useCartStore } from '@/stores/cart';
 
 const productsStore = useProductsStore();
+const cartsStore = useCartStore();
+
+const addToCart = (product) => {
+    cartsStore.addToCart(product);
+    productsStore.decreaseStock(product.id);
+}
 </script>
